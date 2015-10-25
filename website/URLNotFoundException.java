@@ -1,4 +1,4 @@
-package cache;
+package website;
 
 
 /**
@@ -7,7 +7,7 @@ package cache;
  * @author 	Majid Ghaderi
  * @version	1.0, Sep 22, 2015
  */
-public class UrlCacheException extends Exception {
+public class URLNotFoundException extends Exception {
 
 	/**
 	 * 
@@ -17,7 +17,7 @@ public class UrlCacheException extends Exception {
 	/**
      * Constructor calls Exception super class with message
      */
-    public UrlCacheException() {
+    public URLNotFoundException() {
         super("UrlCache exception");
     }
 
@@ -25,7 +25,7 @@ public class UrlCacheException extends Exception {
      * Constructor calls Exception super class with message
      * @param message The message of exception
      */
-    public UrlCacheException(String message) {
+    public URLNotFoundException(String message) {
         super(message);
     }
 }

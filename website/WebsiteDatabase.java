@@ -1,4 +1,4 @@
-package cache;
+package website;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -36,9 +36,9 @@ public class WebsiteDatabase {
 	 * Further development should include a constructor so that different
 	 * cache databases could be passed into the object.
 	 * 
-	 * @throws UrlCacheException
+	 * @throws URLNotFoundException
 	 */
-	public WebsiteDatabase() throws UrlCacheException{
+	public WebsiteDatabase() throws URLNotFoundException{
 		// Load cache, either brand new or from saved.
 		filename = new File("cache.dat");
 		if (filename.exists()){
@@ -55,7 +55,7 @@ public class WebsiteDatabase {
 	 * site is valid, if it has previously visited the page before.
 	 * 
 	 * @param url
-	 * @throws UrlCacheException
+	 * @throws URLNotFoundException
 	 */
 	public synchronized Message getObject(String url){
 		// Confirm if file is in directory
@@ -73,14 +73,14 @@ public class WebsiteDatabase {
 	 * 
 	 * @param url
 	 * @return
-	 * @throws UrlCacheException
+	 * @throws URLNotFoundException
 	 */
-	public synchronized long getLastModified(String url) throws UrlCacheException{
+	public synchronized long getLastModified(String url) throws URLNotFoundException{
 		MyURL m = new MyURL(url);
 		Message msg = data.get(m.toString());
 		long value = msg.getLastModified();
 		if (value < 0){
-			throw new UrlCacheException(url + " \n was not found in the cashe, "
+			throw new URLNotFoundException(url + " \n was not found in the cashe, "
 					+" course requirements dictated a thrown message over a completed"
 					+" conditional-GET, so this was thrown.");
 		}else{
@@ -111,10 +111,10 @@ public class WebsiteDatabase {
 	 * the hashMap back to its generic type. Not using datafiles which
 	 * are of a different type will crash.
 	 * 
-	 * @throws UrlCacheException
+	 * @throws URLNotFoundException
 	 */
 	@SuppressWarnings(value = "unchecked")
-	private void loadFromFile() throws UrlCacheException{
+	private void loadFromFile() throws URLNotFoundException{
 		ObjectInputStream reader;
 		try {
 			reader = new ObjectInputStream(new FileInputStream(filename));
@@ -123,7 +123,7 @@ public class WebsiteDatabase {
 				data = (Map<String, Message>) obj;
 			} else {
 				reader.close();
-				throw new UrlCacheException("Could not load cache from: " + "filename");
+				throw new URLNotFoundException("Could not load cache from: " + "filename");
 			}
 			reader.close();
 		}catch(ClassNotFoundException e){

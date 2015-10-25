@@ -1,5 +1,5 @@
-import cache.UrlCacheException;
-import cache.WebsiteDatabase;
+import website.URLNotFoundException;
+import website.WebsiteDatabase;
 
 public class Critical {
 
@@ -10,7 +10,7 @@ public class Critical {
 		try {
 			website = new WebsiteDatabase();
 			active = true;
-		} catch (UrlCacheException e) {
+		} catch (URLNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
