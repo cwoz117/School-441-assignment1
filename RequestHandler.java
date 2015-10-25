@@ -38,39 +38,39 @@ public class RequestHandler implements Runnable{
 			while(input.ready()){
 				s += input.readLine();
 			}
-			Message m, send;
+			Message receivedMessage, serverResponse;
 			try {
-				m = new Message(s);
+				receivedMessage = new Message(s);
 				System.out.println(s);
-				Message webObject = region.getWebsite().getObject(m.getContentStatus());
+				Message webObject = region.getWebsite().getObject(receivedMessage.getContentStatus());
 				if (webObject.getEntity() == null){
 					// send 404 not found
-					send = new Message("HTTP/1.1", "404", "Not Found");
-					send.addHeader("connection:", "close");
+					serverResponse = new Message("HTTP/1.1", "404", "Not Found");
+					serverResponse.addHeader("connection:", "close");
 
 				} else {
 					// Found message
-					send = new Message("HTTP/1.1", "200", "OK");
-					send.addHeader("connection:", "close");
-					send.addHeader("Content-Type:", webObject.getEntityType());
-					send.setEntity(webObject.getEntity());
+					serverResponse = new Message("HTTP/1.1", "200", "OK");
+					serverResponse.addHeader("connection:", "close");
+					serverResponse.addHeader("Content-Type:", webObject.getEntityType());
+					serverResponse.setEntity(webObject.getEntity());
 				}
 			} catch (InvalidURLException e) {
 				// send 400 bad request
-				send = new Message("HTTP/1.1", "400", "Bad Request");
-				send.addHeader("Connection:", "close");
+				serverResponse = new Message("HTTP/1.1", "400", "Bad Request");
+				serverResponse.addHeader("Connection:", "close");
 
 				String notFound = "<!DOCTYPE html><html><head><title>Not Found</title></head>" +
 								  "<body>Not Found</body></html>";
 				byte[] ent= notFound.getBytes("UTF-8");
-				send.addHeader("Content-Encoding", "UTF-8");
-				send.addHeader("Content-Length", Integer.toString(ent.length));
-				send.addHeader("Content-Type", "text/html");
+				serverResponse.addHeader("Content-Encoding", "UTF-8");
+				serverResponse.addHeader("Content-Length", Integer.toString(ent.length));
+				serverResponse.addHeader("Content-Type", "text/html");
 
-				send.setEntity(ent);
+				serverResponse.setEntity(ent);
 			}
-			if (send != null){
-				soc.getOutputStream().write(send.toByteArray());
+			if (serverResponse != null){
+				soc.getOutputStream().write(serverResponse.toByteArray());
 				soc.getOutputStream().flush();
 			}
 			soc.shutdownOutput();

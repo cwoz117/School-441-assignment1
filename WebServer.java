@@ -17,9 +17,4 @@ public class WebServer{
 	public void stop(){
 		critRegion.setActive(false);
 	}
-
-
-
-
-
 }

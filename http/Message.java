@@ -97,18 +97,19 @@ public class Message implements Serializable{
 		}
 		return (long) -1;
 	}
+	
 	public void setEntity(byte[] newEntity){
 		entity = new byte[newEntity.length];
 		for (byte i : entity){
 			entity[i] = newEntity[i];
 		}
 	}
+	
 	public void addHeader(String headerFieldName, String value){
 		headerLines.add(new ArrayList<String>());
 		headerLines.get(headerLines.size()-1).add(headerFieldName);
 		headerLines.get(headerLines.size()-1).add(value);
 	}
-	
 	public byte[] toByteArray(){
 		String msg = "";
 		msg += messageInfo[0] + " " + messageInfo[1] + " " + messageInfo[2] + "\n";
@@ -127,6 +128,7 @@ public class Message implements Serializable{
 				output[i] = entity[i - header.length];
 			}
 		}
+		System.out.println(output.length);
 		return output;
 	}
 	public String toString(){
